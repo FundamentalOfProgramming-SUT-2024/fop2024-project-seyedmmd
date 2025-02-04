@@ -412,7 +412,7 @@ void room2()
     }
     attroff(A_BOLD);
 
-    starty[9] = rand() % 5 + 4;
+    starty[9] = rand() % 15 + 4;
     startx[9] = rand() % 10 + 48;
     height[9] = rand() % 5 + 6;
     width[9] = rand() % 15 + 15;
@@ -505,9 +505,9 @@ void room2()
     }
     attroff(A_BOLD);
 
-    starty[11] = rand() % 15 + 4;
+    starty[11] = rand() % 4 + 15;
     startx[11] = rand() % 10 + 137;
-    height[11] = rand() % 1 + 6;
+    height[11] = rand() % 4 + 6;
     width[11] = rand() % 15 + 10;
 
     x_door_up[11] = rand() % (width[11] - 2);
@@ -579,16 +579,67 @@ void room2()
         }
     }
     attroff(A_BOLD);
+    /*
+///////////////////////////////////////////////////////////////////
+    */
+    starty[13] = rand() % 4 + 27;
+    startx[13] = rand() % 20 + 40;
+
+    x_door_up[13] = rand() % (width[stair1] - 2);
+    y_door_up[13] = 0;
+
+    x_door_right[13] = width[stair1] - 1;
+    y_door_right[13] = rand() % (height[stair1] - 2);
+
+    map2[starty[13] + y_door_up[13]][startx[13] + x_door_up[13] + 1] = '=';
+    map2[starty[13] + y_door_up[13] + 1][startx[13] + x_door_up[13]] = '=';
 
     /*
-
-
-
-
-
-
-
+\\\\\\\\///////////////////////////////////////////////////////
     */
+
+    starty[14] = rand() % 4 + 30;
+    startx[14] = rand() % 10 + 130;
+    height[14] = rand() % 2 + 6;
+    width[14] = rand() % 20 + 15;
+
+    x_door_left[14] = 0;
+    y_door_left[14] = rand() % (height[14] - 2);
+
+    x_door_up[14] = rand() % (width[14] - 2);
+    y_door_up[14] = 0;
+
+    attron(A_BOLD);
+    for (int y = 0; y < height[14]; y++)
+    {
+        for (int x = 0; x < width[14]; x++)
+        {
+            if (y == y_door_left[14] + 1 && (x == x_door_left[14]))
+            {
+
+                map2[starty[14] + y][startx[14] + x] = '=';
+            }
+            else if (y == y_door_up[14] && (x == x_door_up[14] + 1))
+            {
+
+                map2[starty[14] + y][startx[14] + x] = '=';
+            }
+            else if ((x == 0 || x == width[14] - 1) && y != 0)
+            {
+                map2[starty[14] + y][startx[14] + x] = '|';
+            }
+            else if (y == 0 || y == height[14] - 1)
+            {
+                map2[starty[14] + y][startx[14] + x] = '_';
+            }
+
+            else
+            {
+                map2[starty[14] + y][startx[14] + x] = '.';
+            }
+        }
+    }
+    attroff(A_BOLD);
 }
 void print_room(int n)
 {
@@ -882,6 +933,302 @@ void print_room(int n)
         }
         attroff(A_BOLD);
     }
+    else if (n == 8)
+    {
+        attron(A_BOLD);
+        for (int y = 0; y < height[7]; y++)
+        {
+            for (int x = 0; x < width[7]; x++)
+            {
+                if (y == y_door_down[7] && (x == x_door_down[7] + 1))
+                {
+
+                    attron(COLOR_PAIR(1));
+                    mvaddch(starty[7] + y, startx[7] + x, '=');
+                    attroff(COLOR_PAIR(1));
+                }
+                else if ((y == y_door_right[7] + 1) && (x == x_door_right[7]))
+                {
+                    attron(COLOR_PAIR(1));
+                    mvaddch(starty[7] + y, startx[7] + x, '=');
+                    attroff(COLOR_PAIR(1));
+                }
+                else if ((x == 0 || x == width[7] - 1) && y != 0)
+                {
+
+                    mvaddch(starty[7] + y, startx[7] + x, '|');
+                }
+                else if (y == 0 || y == height[7] - 1)
+                {
+                    mvaddch(starty[7] + y, startx[7] + x, '_');
+                }
+
+                else
+                {
+                    mvaddch(starty[7] + y, startx[7] + x, '.');
+                }
+            }
+        }
+        attroff(A_BOLD);
+    }
+    else if (n == 9)
+    {
+        attron(A_BOLD);
+        for (int y = 0; y < height[8]; y++)
+        {
+            for (int x = 0; x < width[8]; x++)
+            {
+                if (y == y_door_left[8] + 1 && (x == x_door_left[8]))
+                {
+                    attron(COLOR_PAIR(1));
+                    mvaddch(starty[8] + y, startx[8] + x, '=');
+                    attroff(COLOR_PAIR(1));
+                }
+                else if (y == y_door_down[8] && (x == x_door_down[8] + 1))
+                {
+                    attron(COLOR_PAIR(1));
+                    mvaddch(starty[8] + y, startx[8] + x, '=');
+                    attroff(COLOR_PAIR(1));
+                }
+
+                else if ((x == 0 || x == width[8] - 1) && y != 0)
+                {
+                    mvaddch(starty[8] + y, startx[8] + x, '|');
+                }
+                else if (y == 0 || y == height[8] - 1)
+                {
+                    mvaddch(starty[8] + y, startx[8] + x, '_');
+                }
+
+                else
+                {
+                    mvaddch(starty[8] + y, startx[8] + x, '.');
+                }
+            }
+        }
+        attroff(A_BOLD);
+    }
+    else if (n == 10)
+    {
+
+        attron(A_BOLD);
+        for (int y = 0; y < height[9]; y++)
+        {
+            for (int x = 0; x < width[9]; x++)
+            {
+                if (y == y_door_down[9] && (x == x_door_down[9] + 1))
+                {
+
+                    attron(COLOR_PAIR(1));
+                    mvaddch(starty[9] + y, startx[9] + x, '=');
+                    attroff(COLOR_PAIR(1));
+                }
+                else if (y == y_door_right[9] + 1 && (x == x_door_right[9]))
+                {
+                    attron(COLOR_PAIR(1));
+                    mvaddch(starty[9] + y, startx[9] + x, '=');
+                    attroff(COLOR_PAIR(1));
+                }
+                else if ((x == 0 || x == width[9] - 1) && y != 0)
+                {
+                    mvaddch(starty[9] + y, startx[9] + x, '|');
+                }
+                else if (y == 0 || y == height[9] - 1)
+                {
+                    mvaddch(starty[9] + y, startx[9] + x, '_');
+                }
+
+                else
+                {
+                    mvaddch(starty[9] + y, startx[9] + x, '.');
+                }
+            }
+        }
+        attroff(A_BOLD);
+    }
+
+    else if (n == 11)
+    {
+        attron(A_BOLD);
+        for (int y = 0; y < height[10]; y++)
+        {
+            for (int x = 0; x < width[10]; x++)
+            {
+                if (y == y_door_down[10] && (x == x_door_down[10] + 1))
+                {
+
+                    attron(COLOR_PAIR(1));
+                    mvaddch(starty[10] + y, startx[10] + x, '=');
+                    attroff(COLOR_PAIR(1));
+                }
+                else if (y == y_door_left[10] + 1 && (x == x_door_left[10]))
+                {
+
+                    attron(COLOR_PAIR(1));
+                    mvaddch(starty[10] + y, startx[10] + x, '=');
+                    attroff(COLOR_PAIR(1));
+                }
+                else if (y == y_door_up[10] && (x == x_door_up[10] + 1))
+                {
+
+                    attron(COLOR_PAIR(1));
+                    mvaddch(starty[10] + y, startx[10] + x, '=');
+                    attroff(COLOR_PAIR(1));
+                }
+                else if ((x == 0 || x == width[10] - 1) && y != 0)
+                {
+                    mvaddch(starty[10] + y, startx[10] + x, '|');
+                }
+                else if (y == 0 || y == height[10] - 1)
+                {
+                    mvaddch(starty[10] + y, startx[10] + x, '_');
+                }
+
+                else
+                {
+                    mvaddch(starty[10] + y, startx[10] + x, '.');
+                }
+            }
+        }
+        attroff(A_BOLD);
+    }
+    else if (n == 12)
+    {
+        attron(A_BOLD);
+        for (int y = 0; y < height[11]; y++)
+        {
+            for (int x = 0; x < width[11]; x++)
+            {
+                if (y == y_door_up[11] && (x == x_door_up[11] + 1))
+                {
+
+                    attron(COLOR_PAIR(1));
+                    mvaddch(starty[11] + y, startx[11] + x, '=');
+                    attroff(COLOR_PAIR(1));
+                }
+                else if ((x == 0 || x == width[11] - 1) && y != 0)
+                {
+                    mvaddch(starty[11] + y, startx[11] + x, '|');
+                }
+                else if (y == 0 || y == height[11] - 1)
+                {
+                    mvaddch(starty[11] + y, startx[11] + x, '_');
+                }
+
+                else
+                {
+                    mvaddch(starty[11] + y, startx[11] + x, '.');
+                }
+            }
+        }
+        attroff(A_BOLD);
+    }
+    else if (n == 13)
+    {
+        attron(A_BOLD);
+        for (int y = 0; y < height[12]; y++)
+        {
+            for (int x = 0; x < width[12]; x++)
+            {
+                if (y == y_door_up[12] && (x == x_door_up[12] + 1))
+                {
+                    attron(COLOR_PAIR(1));
+                    mvaddch(starty[12] + y, startx[12] + x, '=');
+                    attroff(COLOR_PAIR(1));
+                }
+                else if ((y == y_door_right[12] + 1) && (x == x_door_right[12]))
+                {
+                    attron(COLOR_PAIR(1));
+                    mvaddch(starty[12] + y, startx[12] + x, '=');
+                    attroff(COLOR_PAIR(1));
+                }
+
+                else if ((x == 0 || x == width[12] - 1) && y != 0)
+                {
+                    mvaddch(starty[12] + y, startx[12] + x, '|');
+                }
+                else if (y == 0 || y == height[12] - 1)
+                {
+                    mvaddch(starty[12] + y, startx[12] + x, '_');
+                }
+
+                else
+                {
+                    mvaddch(starty[12] + y, startx[12] + x, '.');
+                }
+            }
+        }
+        attroff(A_BOLD);
+    }
+
+    else if (n == 14)
+    {
+        attron(A_BOLD);
+        for (int y = 0; y < height[stair1]; y++)
+        {
+            for (int x = 0; x < width[stair1]; x++)
+            {
+                if (map1[starty[stair1] + y][startx[stair1] + x] == '=')
+                {
+                    if (y == 0 || (y == height[stair1] - 1 && x != 0 && x != width[stair1] - 1))
+                        mvaddch(starty[13] + y, startx[13] + x, '_');
+
+                    else
+                        mvaddch(starty[13] + y, startx[13] + x, '|');
+                }
+                else
+                {
+                    mvaddch(starty[13] + y, startx[13] + x, map1[starty[stair1] + y][startx[stair1] + x]);
+                }
+
+                if (map2[starty[13] + y][startx[13] + x] == '=')
+                {
+                    attron(COLOR_PAIR(1));
+                    mvaddch(starty[13] + y, startx[13] + x, '=');
+                    attroff(COLOR_PAIR(1));
+                }
+            }
+        }
+        attroff(A_BOLD);
+    }
+    else if (n == 15)
+    {
+        attron(A_BOLD);
+        for (int y = 0; y < height[14]; y++)
+        {
+            for (int x = 0; x < width[14]; x++)
+            {
+                if (y == y_door_left[14] + 1 && (x == x_door_left[14]))
+                {
+
+                    attron(COLOR_PAIR(1));
+                    mvaddch(starty[14] + y, startx[14] + x, '=');
+                    attroff(COLOR_PAIR(1));
+                }
+                else if (y == y_door_up[14] && (x == x_door_up[14] + 1))
+                {
+
+                    attron(COLOR_PAIR(1));
+                    mvaddch(starty[14] + y, startx[14] + x, '=');
+                    attroff(COLOR_PAIR(1));
+                }
+                else if ((x == 0 || x == width[14] - 1) && y != 0)
+                {
+                    mvaddch(starty[14] + y, startx[14] + x, '|');
+                }
+                else if (y == 0 || y == height[14] - 1)
+                {
+                    mvaddch(starty[14] + y, startx[14] + x, '_');
+                }
+
+                else
+                {
+                    mvaddch(starty[14] + y, startx[14] + x, '.');
+                }
+            }
+        }
+        attroff(A_BOLD);
+    }
 }
 
 void margin()
@@ -973,6 +1320,7 @@ void elements()
     attron(COLOR_PAIR(3));
     mvprintw(43, 3, "Hunger:          |");
     mvprintw(43, 30, "Health:          |");
+    mvprintw(43, 60, "Gold:               |");
     attroff(COLOR_PAIR(3));
     attroff(A_BOLD);
 }
@@ -1378,11 +1726,20 @@ int main()
     cbreak();
     curs_set(0);
     room1();
-    stairs();
-    corridor();
-    elements();
-    food();
-    handle_motion_input();
+    mvprintw(10, 10, "%d", stair1);
+    // stairs();
+    mvprintw(10, 20, "%d", stair1);
 
+    room2();
+    // stairs();
+    // corridor();
+    // elements();
+    // food();
+    // handle_motion_input();
+    for (int i = 8; i < 16; i++)
+    {
+        print_room(i);
+    }
+    getch();
     endwin();
 }
