@@ -19,6 +19,20 @@ int x_door_right[50], y_door_right[50];
 char map1[45][184];
 char map2[45][184];
 
+chtype save_map1[45][184];
+chtype save_map2[45][184];
+void initialization()
+{
+    for (int i = 3; i < 42; i++)
+    {
+        for (int j = 3; j < 181; j++)
+        {
+            save_map1[i][j] = ' ';
+            save_map2[i][j] = ' ';
+        }
+    }
+}
+
 char floor1_food[45][184];
 int x_floor1_food[2];
 int y_floor1_food[2];
@@ -321,7 +335,16 @@ void room1()
     attroff(A_BOLD);
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////7
+void stairs()
+{
+    // for floor_1
+    stair1 = rand() % 7;
+    attron(COLOR_PAIR(5));
+    map1[starty[stair1] + (height[stair1] / 2)][startx[stair1] + (width[stair1] / 2)] = '>';
+    attroff(COLOR_PAIR(5));
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////
 void room2()
 {
@@ -332,8 +355,8 @@ void room2()
     height[7] = rand() % 10 + 6;
     width[7] = rand() % 15 + 6;
 
-    x_door_down[7] = rand() % (width[0] - 2);
-    y_door_down[7] = height[0] - 1;
+    x_door_down[7] = rand() % (width[7] - 2);
+    y_door_down[7] = height[7] - 1;
 
     x_door_right[7] = width[7] - 1;
     y_door_right[7] = rand() % (height[7] - 2);
@@ -346,7 +369,7 @@ void room2()
             if (y == y_door_down[7] && (x == x_door_down[7] + 1))
             {
 
-                map1[starty[7] + y][startx[7] + x] = '=';
+                map2[starty[7] + y][startx[7] + x] = '=';
             }
             else if ((y == y_door_right[7] + 1) && (x == x_door_right[7]))
             {
@@ -355,16 +378,16 @@ void room2()
             else if ((x == 0 || x == width[7] - 1) && y != 0)
             {
 
-                map1[starty[7] + y][startx[7] + x] = '|';
+                map2[starty[7] + y][startx[7] + x] = '|';
             }
             else if (y == 0 || y == height[7] - 1)
             {
-                map1[starty[7] + y][startx[7] + x] = '_';
+                map2[starty[7] + y][startx[7] + x] = '_';
             }
 
             else
             {
-                map1[starty[0] + y][startx[0] + x] = '.';
+                map2[starty[7] + y][startx[7] + x] = '.';
             }
         }
     }
@@ -412,9 +435,9 @@ void room2()
     }
     attroff(A_BOLD);
 
-    starty[9] = rand() % 15 + 4;
+    starty[9] = rand() % 10 + 4;
     startx[9] = rand() % 10 + 48;
-    height[9] = rand() % 5 + 6;
+    height[9] = rand() % 4 + 6;
     width[9] = rand() % 15 + 15;
 
     x_door_down[9] = rand() % (width[9] - 2);
@@ -539,9 +562,9 @@ void room2()
     }
     attroff(A_BOLD);
 
-    starty[12] = rand() % 3 + 25;
+    starty[12] = rand() % 3 + 24;
     startx[12] = rand() % 10 + 3;
-    height[12] = rand() % 10 + 6;
+    height[12] = rand() % 8 + 6;
     width[12] = rand() % 15 + 6;
 
     x_door_up[12] = rand() % (width[12] - 2);
@@ -582,7 +605,7 @@ void room2()
     /*
 ///////////////////////////////////////////////////////////////////
     */
-    starty[13] = rand() % 4 + 27;
+    starty[13] = rand() % 4 + 25;
     startx[13] = rand() % 20 + 40;
 
     x_door_up[13] = rand() % (width[stair1] - 2);
@@ -592,7 +615,39 @@ void room2()
     y_door_right[13] = rand() % (height[stair1] - 2);
 
     map2[starty[13] + y_door_up[13]][startx[13] + x_door_up[13] + 1] = '=';
-    map2[starty[13] + y_door_up[13] + 1][startx[13] + x_door_up[13]] = '=';
+    map2[starty[13] + y_door_right[13] + 1][startx[13] + x_door_right[13]] = '=';
+
+    for (int y = 0; y < height[stair1]; y++)
+    {
+        for (int x = 0; x < width[stair1]; x++)
+        {
+            if (map1[starty[stair1] + y][startx[stair1] + x] == '=')
+            {
+                if (y == 0 || (y == height[stair1] - 1 && x != 0 && x != width[stair1] - 1))
+                {
+                    if (map2[starty[13] + y][startx[13] + x] != '=')
+                        map2[starty[13] + y][startx[13] + x] = '_';
+                }
+
+                else if (y != 0 && (x == 0 || x == width[stair1] - 1))
+                {
+                    if (map2[starty[13] + y][startx[13] + x] != '=')
+                        map2[starty[13] + y][startx[13] + x] = '|';
+                }
+            }
+            else if (map1[starty[stair1] + y][startx[stair1] + x] == '>')
+            {
+
+                map2[starty[13] + y][startx[13] + x] = '<';
+            }
+
+            else
+            {
+                if (map2[starty[13] + y][startx[13] + x] != '=')
+                    map2[starty[13] + y][startx[13] + x] = map1[starty[stair1] + y][startx[stair1] + x];
+            }
+        }
+    }
 
     /*
 \\\\\\\\///////////////////////////////////////////////////////
@@ -1171,11 +1226,22 @@ void print_room(int n)
                 if (map1[starty[stair1] + y][startx[stair1] + x] == '=')
                 {
                     if (y == 0 || (y == height[stair1] - 1 && x != 0 && x != width[stair1] - 1))
+                    {
                         mvaddch(starty[13] + y, startx[13] + x, '_');
+                    }
 
-                    else
+                    else if (y != 0 && (x == 0 || x == width[stair1] - 1))
+                    {
                         mvaddch(starty[13] + y, startx[13] + x, '|');
+                    }
                 }
+                else if (map1[starty[stair1] + y][startx[stair1] + x] == '>')
+                {
+                    attron(COLOR_PAIR(5));
+                    mvaddch(starty[13] + y, startx[13] + x, '<');
+                    attroff(COLOR_PAIR(5));
+                }
+
                 else
                 {
                     mvaddch(starty[13] + y, startx[13] + x, map1[starty[stair1] + y][startx[stair1] + x]);
@@ -1189,6 +1255,7 @@ void print_room(int n)
                 }
             }
         }
+
         attroff(A_BOLD);
     }
     else if (n == 15)
@@ -1385,17 +1452,17 @@ void Hunger(int n, int *count_message)
     }
     attroff(A_BOLD);
 }
-void stairs()
+
+void snake()
 {
-    // for floor_1
-    stair1 = rand() % 7;
-    attron(COLOR_PAIR(5));
-    map1[starty[stair1] + (height[stair1] / 2)][startx[stair1] + (width[stair1] / 2)] = '>';
-    attroff(COLOR_PAIR(5));
 }
 void handle_motion_input()
 {
+
     attron(A_BOLD);
+    int floor = 1;
+    int transfer = 0;
+
     int select_room = rand() % 7 + 1;
     print_room(select_room);
 
@@ -1422,134 +1489,345 @@ void handle_motion_input()
     while (1)
     {
         margin();
+
         int previous_x = x;
         int previous_y = y;
-        int A = getch();
-        switch (A)
+
+        if (floor == 1)
         {
-
-        case '8':
-
-            if (map1[y - 1][x] == '.' || map1[y - 1][x] == '=' || map1[y - 1][x] == '*' || map1[y - 1][x] == '>')
-                y--;
-            break;
-        case '2':
-
-            if (map1[y + 1][x] == '.' || map1[y + 1][x] == '=' || map1[y + 1][x] == '*' || map1[y + 1][x] == '>')
-                y++;
-            break;
-        case '6':
-
-            if (map1[y][x + 1] == '.' || map1[y][x + 1] == '=' || map1[y][x + 1] == '*' || map1[y][x + 1] == '>')
-                x++;
-            break;
-        case '4':
-
-            if (map1[y][x - 1] == '.' || map1[y][x - 1] == '=' || map1[y][x - 1] == '*' || map1[y][x - 1] == '>')
-                x--;
-            break;
-        case '3':
-            if (map1[y + 1][x + 1] == '.' || map1[y + 1][x + 1] == '=' || map1[y + 1][x + 1] == '*' || map1[y + 1][x + 1] == '>')
+            int A = getch();
+            switch (A)
             {
-                x++;
-                y++;
-            }
-            break;
-        case '7':
-            if (map1[y - 1][x - 1] == '.' || map1[y - 1][x - 1] == '=' || map1[y - 1][x - 1] == '*' || map1[y - 1][x - 1] == '>')
-            {
-                x--;
-                y--;
-            }
-            break;
-        case '9':
-            if (map1[y - 1][x + 1] == '.' || map1[y - 1][x + 1] == '=' || map1[y - 1][x + 1] == '*' || map1[y - 1][x + 1] == '>')
-            {
-                y--;
-                x++;
-            }
-            break;
-        case '1':
-            if (map1[y + 1][x - 1] == '.' || map1[y + 1][x - 1] == '=' || map1[y + 1][x - 1] == '*' || map1[y + 1][x - 1] == '>')
-            {
-                y++;
-                x--;
-            }
-            break;
-        case 'q':
-            exit = 1;
-            break;
-        default:
-            break;
-        }
 
-        for (int i = -1; i < 2; i++)
-        {
-            for (int j = -1; j < 2; j++)
-            {
-                if (map1[y + i][x + j] == '*')
+            case '8':
+
+                if (map1[y - 1][x] == '.' || map1[y - 1][x] == '=' || map1[y - 1][x] == '*' || map1[y - 1][x] == '>')
+                    y--;
+                break;
+            case '2':
+
+                if (map1[y + 1][x] == '.' || map1[y + 1][x] == '=' || map1[y + 1][x] == '*' || map1[y + 1][x] == '>')
+                    y++;
+                break;
+            case '6':
+
+                if (map1[y][x + 1] == '.' || map1[y][x + 1] == '=' || map1[y][x + 1] == '*' || map1[y][x + 1] == '>')
+                    x++;
+                break;
+            case '4':
+
+                if (map1[y][x - 1] == '.' || map1[y][x - 1] == '=' || map1[y][x - 1] == '*' || map1[y][x - 1] == '>')
+                    x--;
+                break;
+            case '3':
+                if (map1[y + 1][x + 1] == '.' || map1[y + 1][x + 1] == '=' || map1[y + 1][x + 1] == '*' || map1[y + 1][x + 1] == '>')
                 {
-                    attron(COLOR_PAIR(2));
-                    mvaddch(y + i, x + j, '.');
-                    attroff(COLOR_PAIR(2));
+                    x++;
+                    y++;
                 }
-                else if (map1[y + i][x + j] == '=')
+                break;
+            case '7':
+                if (map1[y - 1][x - 1] == '.' || map1[y - 1][x - 1] == '=' || map1[y - 1][x - 1] == '*' || map1[y - 1][x - 1] == '>')
                 {
-                    attron(COLOR_PAIR(1));
-                    mvaddch(y + i, x + j, map1[y + i][x + j]);
-                    attroff(COLOR_PAIR(1));
+                    x--;
+                    y--;
+                }
+                break;
+            case '9':
+                if (map1[y - 1][x + 1] == '.' || map1[y - 1][x + 1] == '=' || map1[y - 1][x + 1] == '*' || map1[y - 1][x + 1] == '>')
+                {
+                    y--;
+                    x++;
+                }
+                break;
+            case '1':
+                if (map1[y + 1][x - 1] == '.' || map1[y + 1][x - 1] == '=' || map1[y + 1][x - 1] == '*' || map1[y + 1][x - 1] == '>')
+                {
+                    y++;
+                    x--;
+                }
+                break;
+            case 'q':
+                exit = 1;
+                break;
+            default:
+                break;
+            }
+
+            for (int i = -1; i < 2; i++)
+            {
+                for (int j = -1; j < 2; j++)
+                {
+                    if (map1[y + i][x + j] == '*')
+                    {
+                        attron(COLOR_PAIR(2));
+                        mvaddch(y + i, x + j, '.');
+                        attroff(COLOR_PAIR(2));
+                    }
+                    else if (map1[y + i][x + j] == '=')
+                    {
+                        attron(COLOR_PAIR(1));
+                        mvaddch(y + i, x + j, map1[y + i][x + j]);
+                        attroff(COLOR_PAIR(1));
+                    }
                 }
             }
-        }
 
-        if (map1[y][x] == '=')
-        {
-
-            if ((y == starty[0] + y_door_down[0] && x == startx[0] + x_door_down[0] + 1))
-                select_room = 1;
-            else if ((y == starty[1] + y_door_down[1] && x == startx[1] + x_door_down[1] + 1) || (y == starty[1] + y_door_right[1] + 1 && x == startx[1] + x_door_right[1]))
-                select_room = 2;
-            else if ((y == starty[2] + y_door_down[2] && x == startx[2] + x_door_down[2] + 1) || (y == starty[2] + y_door_left[2] + 1 && x == startx[2] + x_door_left[2]) || (y == starty[2] + y_door_right[2] + 1 && x == startx[2] + x_door_right[2]))
-                select_room = 3;
-            else if ((y == starty[3] + y_door_left[3] + 1 && x == startx[3] + x_door_left[3]) || (y == starty[3] + y_door_right[3] + 1 && x == startx[3] + x_door_right[3]))
-                select_room = 4;
-            else if (y == starty[4] + y_door_up[4] && x == startx[4] + x_door_up[4] + 1)
-                select_room = 5;
-            else if ((y == starty[5] + y_door_up[5] && x == startx[5] + x_door_up[5] + 1) || (y == starty[5] + y_door_right[5] + 1 && x == startx[5] + x_door_right[5]))
-                select_room = 6;
-            else if (y == starty[6] + y_door_left[6] + 1 && x == startx[6] + x_door_left[6])
-                select_room = 7;
-        }
-        if (map1[y][x] == '*')
-        {
-            select_room = 0;
-        }
-        print_room(select_room);
-        print_food(select_room, y, x, &n1);
-        if (exit != 0)
-        {
-            break;
-        }
-
-        mvaddch(previous_y, previous_x, previous_char);
-
-        previous_char = mvinch(y, x);
-
-        mvaddch(y, x, 'O');
-        refresh();
-
-        if (map1[y][x] == '>')
-        {
-            attron(A_BOLD);
-            attron(COLOR_PAIR(4));
-            mvprintw(1, 3, "You can press '>' key to go to the next floor!");
-            attroff(COLOR_PAIR(4));
-            while (getch() != 32)
+            if (map1[y][x] == '=')
             {
+
+                if ((y == starty[0] + y_door_down[0] && x == startx[0] + x_door_down[0] + 1))
+                    select_room = 1;
+                else if ((y == starty[1] + y_door_down[1] && x == startx[1] + x_door_down[1] + 1) || (y == starty[1] + y_door_right[1] + 1 && x == startx[1] + x_door_right[1]))
+                    select_room = 2;
+                else if ((y == starty[2] + y_door_down[2] && x == startx[2] + x_door_down[2] + 1) || (y == starty[2] + y_door_left[2] + 1 && x == startx[2] + x_door_left[2]) || (y == starty[2] + y_door_right[2] + 1 && x == startx[2] + x_door_right[2]))
+                    select_room = 3;
+                else if ((y == starty[3] + y_door_left[3] + 1 && x == startx[3] + x_door_left[3]) || (y == starty[3] + y_door_right[3] + 1 && x == startx[3] + x_door_right[3]))
+                    select_room = 4;
+                else if (y == starty[4] + y_door_up[4] && x == startx[4] + x_door_up[4] + 1)
+                    select_room = 5;
+                else if ((y == starty[5] + y_door_up[5] && x == startx[5] + x_door_up[5] + 1) || (y == starty[5] + y_door_right[5] + 1 && x == startx[5] + x_door_right[5]))
+                    select_room = 6;
+                else if (y == starty[6] + y_door_left[6] + 1 && x == startx[6] + x_door_left[6])
+                    select_room = 7;
             }
-            mvprintw(1, 3, "                                                            ");
-            attroff(A_BOLD);
+            if (map1[y][x] == '*')
+            {
+                select_room = 0;
+            }
+            if (select_room > 0 && select_room < 8)
+            {
+                print_room(select_room);
+                print_food(select_room, y, x, &n1);
+            }
+            if (exit != 0)
+            {
+                break;
+            }
+
+            mvaddch(previous_y, previous_x, previous_char);
+
+            previous_char = mvinch(y, x);
+
+            mvaddch(y, x, 'O');
+            refresh();
+
+            if (map1[y][x] == '>')
+            {
+                attron(A_BOLD);
+                attron(COLOR_PAIR(4));
+                mvprintw(1, 3, "You can press '>' key to go to the next floor!(first press 'space' key)");
+                attroff(COLOR_PAIR(4));
+                while (getch() != 32)
+                {
+                }
+                mvprintw(1, 3, "                                                                          ");
+                if (getch() == '>')
+                {
+                    for (int i = 3; i < 42; i++)
+                    {
+                        for (int j = 3; j < 181; j++)
+                        {
+                            save_map1[i][j] = mvinch(i, j);
+                        }
+                    }
+                    // clear
+                    for (int i = 3; i < 42; i++)
+                    {
+                        for (int j = 3; j < 181; j++)
+                        {
+                            mvaddch(i, j, ' ');
+                        }
+                    }
+
+                    floor = 2;
+
+                    for (int i = 3; i < 42; i++)
+                    {
+                        for (int j = 3; j < 181; j++)
+                        {
+                            // if (save_map2[i][j] == '_' || save_map2[i][j] == '|' || save_map2[i][j] == '=')
+                            mvaddch(i, j, save_map2[i][j]);
+                        }
+                    }
+                    print_room(14);
+                    y = starty[13] + (height[stair1] / 2);
+                    x = startx[13] + (width[stair1] / 2);
+                    previous_char = mvinch(y, x);
+                    mvaddch(y, x, 'O');
+                }
+                attroff(A_BOLD);
+            }
         }
+
+        else if (floor == 2)
+        {
+            int A = getch();
+            switch (A)
+            {
+
+            case '8':
+
+                if (map2[y - 1][x] == '.' || map2[y - 1][x] == '=' || map2[y - 1][x] == '*' || map2[y - 1][x] == '<')
+                    y--;
+                break;
+            case '2':
+
+                if (map2[y + 1][x] == '.' || map2[y + 1][x] == '=' || map2[y + 1][x] == '*' || map2[y + 1][x] == '<')
+                    y++;
+                break;
+            case '6':
+
+                if (map2[y][x + 1] == '.' || map2[y][x + 1] == '=' || map2[y][x + 1] == '*' || map2[y][x + 1] == '<')
+                    x++;
+                break;
+            case '4':
+
+                if (map2[y][x - 1] == '.' || map2[y][x - 1] == '=' || map2[y][x - 1] == '*' || map2[y][x - 1] == '<')
+                    x--;
+                break;
+            case '3':
+                if (map2[y + 1][x + 1] == '.' || map2[y + 1][x + 1] == '=' || map2[y + 1][x + 1] == '*' || map2[y + 1][x + 1] == '<')
+                {
+                    x++;
+                    y++;
+                }
+                break;
+            case '7':
+                if (map2[y - 1][x - 1] == '.' || map2[y - 1][x - 1] == '=' || map2[y - 1][x - 1] == '*' || map2[y - 1][x - 1] == '<')
+                {
+                    x--;
+                    y--;
+                }
+                break;
+            case '9':
+                if (map2[y - 1][x + 1] == '.' || map2[y - 1][x + 1] == '=' || map2[y - 1][x + 1] == '*' || map2[y - 1][x + 1] == '<')
+                {
+                    y--;
+                    x++;
+                }
+                break;
+            case '1':
+                if (map2[y + 1][x - 1] == '.' || map2[y + 1][x - 1] == '=' || map2[y + 1][x - 1] == '*' || map2[y + 1][x - 1] == '<')
+                {
+                    y++;
+                    x--;
+                }
+                break;
+            case 'q':
+                exit = 1;
+                break;
+            default:
+                break;
+            }
+
+            for (int i = -1; i < 2; i++)
+            {
+                for (int j = -1; j < 2; j++)
+                {
+                    if (map2[y + i][x + j] == '*')
+                    {
+                        attron(COLOR_PAIR(2));
+                        mvaddch(y + i, x + j, '.');
+                        attroff(COLOR_PAIR(2));
+                    }
+                    else if (map2[y + i][x + j] == '=')
+                    {
+                        attron(COLOR_PAIR(1));
+                        mvaddch(y + i, x + j, map2[y + i][x + j]);
+                        attroff(COLOR_PAIR(1));
+                    }
+                }
+            }
+
+            if (map2[y][x] == '=')
+            {
+
+                if ((y == starty[7] + y_door_down[7] && x == startx[7] + x_door_down[7] + 1) || (y == starty[7] + y_door_right[7] + 1 && x == startx[7] + x_door_right[7]))
+                    select_room = 8;
+                else if ((y == starty[8] + y_door_down[8] && x == startx[8] + x_door_down[8] + 1) || (y == starty[8] + y_door_left[8] + 1 && x == startx[8] + x_door_right[8]))
+                    select_room = 9;
+                else if ((y == starty[9] + y_door_down[9] && x == startx[9] + x_door_down[9] + 1) || (y == starty[9] + y_door_right[9] + 1 && x == startx[9] + x_door_right[9]))
+                    select_room = 10;
+                else if ((y == starty[10] + y_door_left[10] + 1 && x == startx[10] + x_door_left[10]) || (y == starty[10] + y_door_down[10] && x == startx[10] + x_door_down[10] + 1) || (y == starty[10] + y_door_up[10] && x == startx[10] + x_door_up[10] + 1))
+                    select_room = 11;
+                else if (y == starty[11] + y_door_up[11] && x == startx[11] + x_door_up[11] + 1)
+                    select_room = 12;
+                else if ((y == starty[12] + y_door_up[12] && x == startx[12] + x_door_up[12] + 1) || (y == starty[12] + y_door_right[12] + 1 && x == startx[12] + x_door_right[12]))
+                    select_room = 13;
+                else if ((y == starty[13] + y_door_right[13] + 1 && x == startx[13] + x_door_right[13]) || (y == starty[13] + y_door_up[13] && x == startx[13] + x_door_up[13] + 1))
+                    select_room = 14;
+                else if ((y == starty[14] + y_door_left[14] + 1 && x == startx[14] + x_door_left[14]) || (y == starty[14] + y_door_up[14] && x == startx[14] + x_door_up[14] + 1))
+                    select_room = 15;
+            }
+            if (map2[y][x] == '*')
+            {
+                select_room = 0;
+            }
+            if (select_room > 7 || select_room < 1)
+            {
+                print_room(select_room);
+                print_food(select_room, y, x, &n1);
+            }
+            if (exit != 0)
+            {
+                break;
+            }
+
+            mvaddch(previous_y, previous_x, previous_char);
+
+            previous_char = mvinch(y, x);
+
+            mvaddch(y, x, 'O');
+            refresh();
+
+            if (map2[y][x] == '<')
+            {
+                attron(A_BOLD);
+                attron(COLOR_PAIR(4));
+                mvprintw(1, 3, "You can press '<' key to go to the previous floor!(first press 'space' key)");
+                attroff(COLOR_PAIR(4));
+                while (getch() != 32)
+                {
+                }
+                mvprintw(1, 3, "                                                                                    ");
+                if (getch() == '<')
+                {
+                    for (int i = 3; i < 42; i++)
+                    {
+                        for (int j = 3; j < 181; j++)
+                        {
+                            save_map2[i][j] = mvinch(i, j);
+                        }
+                    }
+                    // clear
+                    for (int i = 3; i < 42; i++)
+                    {
+                        for (int j = 3; j < 181; j++)
+                        {
+                            mvaddch(i, j, ' ');
+                        }
+                    }
+                    floor = 1;
+
+                    for (int i = 3; i < 42; i++)
+                    {
+                        for (int j = 3; j < 181; j++)
+                        {
+                            // if (save_map1[i][j] == '_' || save_map1[i][j] == '|' || save_map1[i][j] == '=')
+                            mvaddch(i, j, save_map1[i][j]);
+                        }
+                    }
+                    print_room(stair1 + 1);
+                    y = starty[stair1] + (height[stair1] / 2);
+                    x = startx[stair1] + (width[stair1] / 2);
+                    previous_char = mvinch(y, x);
+                    mvaddch(y, x, 'O');
+                }
+                attroff(A_BOLD);
+            }
+        }
+        //////////////////////////////////////////////
         // hunger
         count_hunger++;
         if (count_hunger > 50)
@@ -1569,83 +1847,154 @@ void handle_motion_input()
         }
         Hunger(n1, &count_message);
         Health(&n2, &count_health);
-        mvprintw(30, 40, "%d %d", n2, count_health);
     }
 
     attroff(A_BOLD);
 }
-void corridor_tool(int x, int y, int x2, int y2)
+void corridor_tool(int floor, int x, int y, int x2, int y2)
 {
-
-    map1[y][x] = '*';
-
-    int i = 0;
-    while ((x != x2 || y != y2) && (i < 100))
+    if (floor == 1)
     {
-        int direction = rand() % 2;
-        if (direction == 0)
+        map1[y][x] = '*';
+
+        int i = 0;
+        while ((x != x2 || y != y2) && (i < 100))
         {
-            int j = 0;
-            while (x != x2 && (j < 100))
+            int direction = rand() % 2;
+            if (direction == 0)
             {
-                x += (x2 > x) ? 1 : -1;
-
-                if (map1[y][x] != '=' && map1[y][x] != '|' && map1[y][x] != '_')
+                int j = 0;
+                while (x != x2 && (j < 100))
                 {
+                    x += (x2 > x) ? 1 : -1;
 
-                    map1[y][x] = '*';
-                }
-                else if (map1[y][x] == '=' || map1[y][x] == '|' || map1[y][x] == '_')
-                {
-                    if (y == y2)
+                    if (map1[y][x] != '=' && map1[y][x] != '|' && map1[y][x] != '_')
                     {
-                        while (map1[y][x] == '=' || map1[y][x] == '|' || map1[y][x] == '_')
-                        {
-                            y--;
 
-                            (x2 > x) ? (map1[y][x - 1] = '*') : (map1[y][x + 1] = '*');
-                        }
+                        map1[y][x] = '*';
                     }
-                    x += (x2 > x) ? -1 : 1;
-                    break;
+                    else if (map1[y][x] == '=' || map1[y][x] == '|' || map1[y][x] == '_')
+                    {
+                        if (y == y2)
+                        {
+                            while (map1[y][x] == '=' || map1[y][x] == '|' || map1[y][x] == '_')
+                            {
+                                y--;
+
+                                (x2 > x) ? (map1[y][x - 1] = '*') : (map1[y][x + 1] = '*');
+                            }
+                        }
+                        x += (x2 > x) ? -1 : 1;
+                        break;
+                    }
+                    j++;
                 }
-                j++;
             }
+            else if (direction == 1)
+            {
+                int j = 0;
+                while (y != y2 && (j < 100))
+                {
+                    y += (y2 > y) ? 1 : -1;
+                    if (map1[y][x] != '=' && map1[y][x] != '|' && map1[y][x] != '_')
+                    {
+
+                        map1[y][x] = '*';
+                    }
+                    else if (map1[y][x] == '=' || map1[y][x] == '|' || map1[y][x] == '_')
+                    {
+
+                        if (x == x2)
+                        {
+                            while (map1[y][x] == '=' || map1[y][x] == '|' || map1[y][x] == '_')
+                            {
+                                x--;
+
+                                (y2 > y) ? (map1[y - 1][x] = '*') : (map1[y + 1][x] = '*');
+                            }
+                        }
+                        y += (y2 > y) ? -1 : 1;
+                        break;
+                    }
+                    j++;
+                }
+            }
+            i++;
         }
-        else if (direction == 1)
+    }
+    else if (floor == 2)
+    {
+        map2[y][x] = '*';
+
+        int i = 0;
+        while ((x != x2 || y != y2) && (i < 100))
         {
-            int j = 0;
-            while (y != y2 && (j < 100))
+            int direction = rand() % 2;
+            if (direction == 0)
             {
-                y += (y2 > y) ? 1 : -1;
-                if (map1[y][x] != '=' && map1[y][x] != '|' && map1[y][x] != '_')
+                int j = 0;
+                while (x != x2 && (j < 100))
                 {
+                    x += (x2 > x) ? 1 : -1;
 
-                    map1[y][x] = '*';
-                }
-                else if (map1[y][x] == '=' || map1[y][x] == '|' || map1[y][x] == '_')
-                {
-
-                    if (x == x2)
+                    if (map2[y][x] != '=' && map2[y][x] != '|' && map2[y][x] != '_')
                     {
-                        while (map1[y][x] == '=' || map1[y][x] == '|' || map1[y][x] == '_')
-                        {
-                            x--;
 
-                            (y2 > y) ? (map1[y - 1][x] = '*') : (map1[y + 1][x] = '*');
-                        }
+                        map2[y][x] = '*';
                     }
-                    y += (y2 > y) ? -1 : 1;
-                    break;
+                    else if (map2[y][x] == '=' || map2[y][x] == '|' || map2[y][x] == '_')
+                    {
+                        if (y == y2)
+                        {
+                            while (map2[y][x] == '=' || map2[y][x] == '|' || map2[y][x] == '_')
+                            {
+                                y--;
+
+                                (x2 > x) ? (map2[y][x - 1] = '*') : (map2[y][x + 1] = '*');
+                            }
+                        }
+                        x += (x2 > x) ? -1 : 1;
+                        break;
+                    }
+                    j++;
                 }
-                j++;
             }
+            else if (direction == 1)
+            {
+                int j = 0;
+                while (y != y2 && (j < 100))
+                {
+                    y += (y2 > y) ? 1 : -1;
+                    if (map2[y][x] != '=' && map2[y][x] != '|' && map2[y][x] != '_')
+                    {
+
+                        map2[y][x] = '*';
+                    }
+                    else if (map2[y][x] == '=' || map2[y][x] == '|' || map2[y][x] == '_')
+                    {
+
+                        if (x == x2)
+                        {
+                            while (map2[y][x] == '=' || map2[y][x] == '|' || map2[y][x] == '_')
+                            {
+                                x--;
+
+                                (y2 > y) ? (map2[y - 1][x] = '*') : (map2[y + 1][x] = '*');
+                            }
+                        }
+                        y += (y2 > y) ? -1 : 1;
+                        break;
+                    }
+                    j++;
+                }
+            }
+            i++;
         }
-        i++;
     }
 }
 void corridor()
 {
+    int floor = 1;
     // coridor 1_down to 6_up
     int x1 = x_door_down[0] + startx[0] + 1, y1 = y_door_down[0] + starty[0] + 1;
     int x2 = x_door_down[1] + startx[1] + 1, y2 = y_door_down[1] + starty[1] + 1;
@@ -1664,7 +2013,7 @@ void corridor()
     chtype character1 = mvinch(0, 0);
     chtype character2 = mvinch(1, 0);
     chtype character3 = mvinch(2, 0);
-    corridor_tool(x, y, x2, y2);
+    corridor_tool(floor, x, y, x2, y2);
 
     //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
     ///////////////////////////////////////    2     //////////////////////////////////////
@@ -1672,7 +2021,7 @@ void corridor()
     x2 = x_door_up[5] + startx[5] + 1, y2 = y_door_up[5] + starty[5] - 1;
     x = x1, y = y1;
 
-    corridor_tool(x, y, x2, y2);
+    corridor_tool(floor, x, y, x2, y2);
 
     //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
     ////////////////////////////////////       3       ////////////////////////////////////
@@ -1682,7 +2031,7 @@ void corridor()
 
     x = x1, y = y1;
 
-    corridor_tool(x, y, x2, y2);
+    corridor_tool(floor, x, y, x2, y2);
     ///////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////    4     ///////////////////////////////////////////////
 
@@ -1691,7 +2040,7 @@ void corridor()
 
     x = x1, y = y1;
 
-    corridor_tool(x, y, x2, y2);
+    corridor_tool(floor, x, y, x2, y2);
     ///////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////      5    ///////////////////////////////////////////
 
@@ -1700,7 +2049,7 @@ void corridor()
 
     x = x1, y = y1;
 
-    corridor_tool(x, y, x2, y2);
+    corridor_tool(floor, x, y, x2, y2);
     ///////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////      6      ///////////////////////////////////////////////
 
@@ -1709,7 +2058,83 @@ void corridor()
 
     x = x1, y = y1;
 
-    corridor_tool(x, y, x2, y2);
+    corridor_tool(floor, x, y, x2, y2);
+    ///////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////
+
+    floor = 2;
+
+    //////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////
+
+    x1 = startx[7] + x_door_down[7] + 1, y1 = starty[7] + y_door_down[7] + 1;
+    x2 = startx[12] + x_door_up[12] + 1, y2 = starty[12] + y_door_up[12] - 1;
+
+    x = x1, y = y1;
+
+    corridor_tool(floor, x, y, x2, y2);
+    ///////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////
+    x1 = startx[7] + x_door_right[7] + 1, y1 = starty[7] + y_door_right[7] + 1;
+    x2 = startx[10] + x_door_up[10] + 1, y2 = starty[10] + y_door_up[10] - 1;
+
+    x = x1, y = y1;
+
+    corridor_tool(floor, x, y, x2, y2);
+    ///////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////
+    x1 = startx[8] + x_door_left[8] - 1, y1 = starty[8] + y_door_left[8] + 1;
+    x2 = startx[8] + x_door_up[11] + 1, y2 = starty[11] + y_door_up[11] - 1;
+
+    x = x1, y = y1;
+
+    corridor_tool(floor, x, y, x2, y2);
+    ///////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////
+    x1 = startx[8] + x_door_down[8] + 1, y1 = starty[8] + y_door_down[8] + 1;
+    x2 = startx[14] + x_door_up[14] + 1, y2 = starty[14] + y_door_up[14] - 1;
+
+    x = x1, y = y1;
+
+    corridor_tool(floor, x, y, x2, y2);
+    ///////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////
+    x1 = startx[9] + x_door_right[9] + 1, y1 = starty[9] + y_door_right[9] + 1;
+    x2 = startx[10] + x_door_left[10] - 1, y2 = starty[10] + y_door_left[10] + 1;
+
+    x = x1, y = y1;
+
+    corridor_tool(floor, x, y, x2, y2);
+    ///////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////
+    x1 = startx[10] + x_door_down[10] + 1, y1 = starty[10] + y_door_down[10] + 1;
+    x2 = startx[13] + x_door_up[13] + 1, y2 = starty[13] + y_door_up[13] - 1;
+
+    x = x1, y = y1;
+
+    corridor_tool(floor, x, y, x2, y2);
+    ///////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////
+    x1 = startx[12] + x_door_right[12] + 1, y1 = starty[12] + y_door_right[12] + 1;
+    x2 = startx[9] + x_door_down[9] + 1, y2 = starty[9] + y_door_down[9] + 1;
+
+    x = x1, y = y1;
+
+    corridor_tool(floor, x, y, x2, y2);
+    ///////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////
+    x1 = startx[13] + x_door_right[13] + 1, y1 = starty[13] + y_door_right[13] + 1;
+    x2 = startx[14] + x_door_left[14] - 1, y2 = starty[14] + y_door_left[14] + 1;
+
+    x = x1, y = y1;
+
+    corridor_tool(floor, x, y, x2, y2);
     ///////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////
 }
@@ -1725,21 +2150,13 @@ int main()
     keypad(stdscr, TRUE);
     cbreak();
     curs_set(0);
+    initialization();
     room1();
-    mvprintw(10, 10, "%d", stair1);
-    // stairs();
-    mvprintw(10, 20, "%d", stair1);
-
+    stairs();
     room2();
-    // stairs();
-    // corridor();
-    // elements();
-    // food();
-    // handle_motion_input();
-    for (int i = 8; i < 16; i++)
-    {
-        print_room(i);
-    }
-    getch();
+    corridor();
+    elements();
+    food();
+    handle_motion_input();
     endwin();
 }
