@@ -5,6 +5,7 @@
 #include <locale.h>
 #include <time.h>
 #include <wchar.h>
+#include <unistd.h>
 
 int WIDTH, HEIGHT;
 int startx[35];
@@ -21,6 +22,38 @@ char map2[45][184];
 
 chtype save_map1[45][184];
 chtype save_map2[45][184];
+
+char floor1_food[45][184];
+int x_floor1_food[10];
+int y_floor1_food[10];
+int statuse_food_floor1[10];
+int food_floor1[10];
+
+char snake_floor1[45][184];
+char snake_floor2[45][184];
+int snake_room_floor1;
+int statuse_snake_floor1[45][184];
+int statuse_snake_floor2[45][184];
+int snake_room_floor2;
+
+int tale_room_floor1;
+int tale_room_floor2;
+
+int Enchant_Room_floor1;
+int Enchant_Room_floor2;
+
+char floor1_gold[45][184];
+int x_floor1_gold[100];
+int y_floor1_gold[100];
+int statuse_gold_floor1[100];
+int gold_floor1[100];
+int meghdar_gold[45][184];
+int gold_room_floor1;
+
+int score = 0;
+
+int stair1;
+
 void initialization()
 {
     for (int i = 3; i < 42; i++)
@@ -31,15 +64,15 @@ void initialization()
             save_map2[i][j] = ' ';
         }
     }
+    for (int i = 3; i < 42; i++)
+    {
+        for (int j = 3; j < 181; j++)
+        {
+            snake_floor1[i][j] = ' ';
+            // snake_floor2[i][j] = ' ';
+        }
+    }
 }
-
-char floor1_food[45][184];
-int x_floor1_food[2];
-int y_floor1_food[2];
-int statuse_food_floor1[2];
-int food_floor1[2];
-
-int stair1;
 void color()
 {
     start_color();
@@ -48,6 +81,8 @@ void color()
     init_pair(3, COLOR_GREEN, COLOR_BLACK);
     init_pair(4, COLOR_BLACK, COLOR_GREEN);
     init_pair(5, COLOR_BLACK, COLOR_GREEN);
+    init_pair(6, COLOR_MAGENTA, COLOR_BLACK);
+    init_pair(7, COLOR_YELLOW, COLOR_BLACK);
 }
 
 void room1()
@@ -701,6 +736,7 @@ void print_room(int n)
 
     if (n == 1)
     {
+
         attron(A_BOLD);
         for (int y = 0; y < height[0]; y++)
         {
@@ -718,18 +754,30 @@ void print_room(int n)
                     mvaddch(starty[0] + y, startx[0] + x, '=');
                     attroff(COLOR_PAIR(1));
                 }
+
                 else if ((x == 0 || x == width[0] - 1) && y != 0)
                 {
+                    if (Enchant_Room_floor1 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[0] + y, startx[0] + x, '|');
+                    if (Enchant_Room_floor1 == n - 1)
+                        attron(COLOR_PAIR(6));
                 }
                 else if (y == 0 || y == height[0] - 1)
                 {
+                    if (Enchant_Room_floor1 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[0] + y, startx[0] + x, '_');
+                    if (Enchant_Room_floor1 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
-
                 else
                 {
+                    if (Enchant_Room_floor1 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[0] + y, startx[0] + x, '.');
+                    if (Enchant_Room_floor1 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
             }
         }
@@ -761,18 +809,31 @@ void print_room(int n)
                     mvaddch(starty[1] + y, startx[1] + x, '=');
                     attroff(COLOR_PAIR(1));
                 }
+
                 else if ((x == 0 || x == width[1] - 1) && y != 0)
                 {
+                    if (Enchant_Room_floor1 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[1] + y, startx[1] + x, '|');
+                    if (Enchant_Room_floor1 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
                 else if (y == 0 || y == height[1] - 1)
                 {
+                    if (Enchant_Room_floor1 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[1] + y, startx[1] + x, '_');
+                    if (Enchant_Room_floor1 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
 
                 else
                 {
+                    if (Enchant_Room_floor1 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[1] + y, startx[1] + x, '.');
+                    if (Enchant_Room_floor1 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
             }
         }
@@ -812,16 +873,28 @@ void print_room(int n)
                 }
                 else if ((x == 0 || x == width[2] - 1) && y != 0)
                 {
+                    if (Enchant_Room_floor1 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[2] + y, startx[2] + x, '|');
+                    if (Enchant_Room_floor1 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
                 else if (y == 0 || y == height[2] - 1)
                 {
+                    if (Enchant_Room_floor1 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[2] + y, startx[2] + x, '_');
+                    if (Enchant_Room_floor1 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
 
                 else
                 {
+                    if (Enchant_Room_floor1 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[2] + y, startx[2] + x, '.');
+                    if (Enchant_Room_floor1 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
             }
         }
@@ -853,19 +926,30 @@ void print_room(int n)
                     mvaddch(starty[3] + y, startx[3] + x, '=');
                     attroff(COLOR_PAIR(1));
                 }
-
                 else if ((x == 0 || x == width[3] - 1) && y != 0)
                 {
+                    if (Enchant_Room_floor1 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[3] + y, startx[3] + x, '|');
+                    if (Enchant_Room_floor1 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
                 else if (y == 0 || y == height[3] - 1)
                 {
+                    if (Enchant_Room_floor1 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[3] + y, startx[3] + x, '_');
+                    if (Enchant_Room_floor1 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
 
                 else
                 {
+                    if (Enchant_Room_floor1 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[3] + y, startx[3] + x, '.');
+                    if (Enchant_Room_floor1 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
             }
         }
@@ -893,16 +977,28 @@ void print_room(int n)
                 }
                 else if ((x == 0 || x == width[4] - 1) && y != 0)
                 {
+                    if (Enchant_Room_floor1 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[4] + y, startx[4] + x, '|');
+                    if (Enchant_Room_floor1 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
                 else if (y == 0 || y == height[4] - 1)
                 {
+                    if (Enchant_Room_floor1 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[4] + y, startx[4] + x, '_');
+                    if (Enchant_Room_floor1 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
 
                 else
                 {
+                    if (Enchant_Room_floor1 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[4] + y, startx[4] + x, '.');
+                    if (Enchant_Room_floor1 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
             }
         }
@@ -936,16 +1032,28 @@ void print_room(int n)
                 }
                 else if ((x == 0 || x == width[5] - 1) && y != 0)
                 {
+                    if (Enchant_Room_floor1 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[5] + y, startx[5] + x, '|');
+                    if (Enchant_Room_floor1 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
                 else if (y == 0 || y == height[5] - 1)
                 {
+                    if (Enchant_Room_floor1 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[5] + y, startx[5] + x, '_');
+                    if (Enchant_Room_floor1 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
 
                 else
                 {
+                    if (Enchant_Room_floor1 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[5] + y, startx[5] + x, '.');
+                    if (Enchant_Room_floor1 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
             }
         }
@@ -973,16 +1081,28 @@ void print_room(int n)
                 }
                 else if ((x == 0 || x == width[6] - 1) && y != 0)
                 {
+                    if (Enchant_Room_floor1 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[6] + y, startx[6] + x, '|');
+                    if (Enchant_Room_floor1 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
                 else if (y == 0 || y == height[6] - 1)
                 {
+                    if (Enchant_Room_floor1 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[6] + y, startx[6] + x, '_');
+                    if (Enchant_Room_floor1 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
 
                 else
                 {
+                    if (Enchant_Room_floor1 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[6] + y, startx[6] + x, '.');
+                    if (Enchant_Room_floor1 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
             }
         }
@@ -1010,17 +1130,28 @@ void print_room(int n)
                 }
                 else if ((x == 0 || x == width[7] - 1) && y != 0)
                 {
-
+                    if (Enchant_Room_floor2 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[7] + y, startx[7] + x, '|');
+                    if (Enchant_Room_floor2 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
                 else if (y == 0 || y == height[7] - 1)
                 {
+                    if (Enchant_Room_floor2 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[7] + y, startx[7] + x, '_');
+                    if (Enchant_Room_floor2 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
 
                 else
                 {
+                    if (Enchant_Room_floor2 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[7] + y, startx[7] + x, '.');
+                    if (Enchant_Room_floor2 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
             }
         }
@@ -1048,16 +1179,28 @@ void print_room(int n)
 
                 else if ((x == 0 || x == width[8] - 1) && y != 0)
                 {
+                    if (Enchant_Room_floor2 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[8] + y, startx[8] + x, '|');
+                    if (Enchant_Room_floor2 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
                 else if (y == 0 || y == height[8] - 1)
                 {
+                    if (Enchant_Room_floor2 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[8] + y, startx[8] + x, '_');
+                    if (Enchant_Room_floor2 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
 
                 else
                 {
+                    if (Enchant_Room_floor2 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[8] + y, startx[8] + x, '.');
+                    if (Enchant_Room_floor2 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
             }
         }
@@ -1086,16 +1229,28 @@ void print_room(int n)
                 }
                 else if ((x == 0 || x == width[9] - 1) && y != 0)
                 {
+                    if (Enchant_Room_floor2 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[9] + y, startx[9] + x, '|');
+                    if (Enchant_Room_floor2 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
                 else if (y == 0 || y == height[9] - 1)
                 {
+                    if (Enchant_Room_floor2 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[9] + y, startx[9] + x, '_');
+                    if (Enchant_Room_floor2 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
 
                 else
                 {
+                    if (Enchant_Room_floor2 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[9] + y, startx[9] + x, '.');
+                    if (Enchant_Room_floor2 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
             }
         }
@@ -1132,16 +1287,28 @@ void print_room(int n)
                 }
                 else if ((x == 0 || x == width[10] - 1) && y != 0)
                 {
+                    if (Enchant_Room_floor2 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[10] + y, startx[10] + x, '|');
+                    if (Enchant_Room_floor2 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
                 else if (y == 0 || y == height[10] - 1)
                 {
+                    if (Enchant_Room_floor2 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[10] + y, startx[10] + x, '_');
+                    if (Enchant_Room_floor2 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
 
                 else
                 {
+                    if (Enchant_Room_floor2 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[10] + y, startx[10] + x, '.');
+                    if (Enchant_Room_floor2 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
             }
         }
@@ -1163,16 +1330,28 @@ void print_room(int n)
                 }
                 else if ((x == 0 || x == width[11] - 1) && y != 0)
                 {
+                    if (Enchant_Room_floor2 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[11] + y, startx[11] + x, '|');
+                    if (Enchant_Room_floor2 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
                 else if (y == 0 || y == height[11] - 1)
                 {
+                    if (Enchant_Room_floor2 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[11] + y, startx[11] + x, '_');
+                    if (Enchant_Room_floor2 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
 
                 else
                 {
+                    if (Enchant_Room_floor2 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[11] + y, startx[11] + x, '.');
+                    if (Enchant_Room_floor2 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
             }
         }
@@ -1200,16 +1379,28 @@ void print_room(int n)
 
                 else if ((x == 0 || x == width[12] - 1) && y != 0)
                 {
+                    if (Enchant_Room_floor2 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[12] + y, startx[12] + x, '|');
+                    if (Enchant_Room_floor2 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
                 else if (y == 0 || y == height[12] - 1)
                 {
+                    if (Enchant_Room_floor2 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[12] + y, startx[12] + x, '_');
+                    if (Enchant_Room_floor2 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
 
                 else
                 {
+                    if (Enchant_Room_floor2 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[12] + y, startx[12] + x, '.');
+                    if (Enchant_Room_floor2 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
             }
         }
@@ -1223,6 +1414,10 @@ void print_room(int n)
         {
             for (int x = 0; x < width[stair1]; x++)
             {
+                if (map1[starty[stair1] + y][startx[stair1] + x] == '?' || map1[starty[stair1] + y][startx[stair1] + x] == '!')
+                {
+                    mvaddch(starty[13] + y, startx[13] + x, '.');
+                }
                 if (map1[starty[stair1] + y][startx[stair1] + x] == '=')
                 {
                     if (y == 0 || (y == height[stair1] - 1 && x != 0 && x != width[stair1] - 1))
@@ -1281,16 +1476,28 @@ void print_room(int n)
                 }
                 else if ((x == 0 || x == width[14] - 1) && y != 0)
                 {
+                    if (Enchant_Room_floor2 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[14] + y, startx[14] + x, '|');
+                    if (Enchant_Room_floor2 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
                 else if (y == 0 || y == height[14] - 1)
                 {
+                    if (Enchant_Room_floor2 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[14] + y, startx[14] + x, '_');
+                    if (Enchant_Room_floor2 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
 
                 else
                 {
+                    if (Enchant_Room_floor2 == n - 1)
+                        attron(COLOR_PAIR(6));
                     mvaddch(starty[14] + y, startx[14] + x, '.');
+                    if (Enchant_Room_floor2 == n - 1)
+                        attroff(COLOR_PAIR(6));
                 }
             }
         }
@@ -1303,8 +1510,6 @@ void margin()
     attron(A_BOLD);
 
     getmaxyx(stdscr, HEIGHT, WIDTH);
-    mvprintw(20, 20, "%d %d", WIDTH, HEIGHT);
-
     for (int y = 0; y < HEIGHT; y++)
     {
         for (int x = 0; x < WIDTH; x++)
@@ -1347,36 +1552,87 @@ void food()
     {
         floor1_food[y_floor1_food[0]][x_floor1_food[0]] = '*';
     }
-}
 
-void print_food(int i, int y, int x, int *n)
+    // for floor_2
+    food_floor1[2] = rand() % 8 + 8;
+    food_floor1[3] = rand() % 8 + 8;
+
+    x_floor1_food[2] = startx[food_floor1[2] - 1] + rand() % (width[food_floor1[2] - 1] - 2) + 1;
+    y_floor1_food[2] = starty[food_floor1[2] - 1] + rand() % (height[food_floor1[2] - 1] - 2) + 1;
+
+    x_floor1_food[3] = startx[food_floor1[3] - 1] + rand() % (width[food_floor1[3] - 1] - 2) + 1;
+    y_floor1_food[3] = starty[food_floor1[3] - 1] + rand() % (height[food_floor1[3] - 1] - 2) + 1;
+
+    if (map2[y_floor1_food[3]][x_floor1_food[3]] == '.')
+    {
+        floor1_food[y_floor1_food[3]][x_floor1_food[3]] = '*';
+    }
+    if (map2[y_floor1_food[2]][x_floor1_food[2]] == '.')
+    {
+        floor1_food[y_floor1_food[2]][x_floor1_food[2]] = '*';
+    }
+}
+void print_food(int floor, int i, int y, int x, int *n)
 {
     attron(A_BOLD);
-    for (int j = 0; j < 2; j++)
+    if (floor == 1)
     {
-        if (i == food_floor1[j])
+        for (int j = 0; j < 2; j++)
         {
-            mvaddch(y_floor1_food[j], x_floor1_food[j], floor1_food[y_floor1_food[j]][x_floor1_food[j]]);
-            statuse_food_floor1[j] = 1;
-        }
-        if (y == y_floor1_food[j] && x == x_floor1_food[j] && floor1_food[y][x] == '*')
-        {
-            mvaddch(y_floor1_food[j], x_floor1_food[j], 'O');
-
-            *n = 0;
-            attron(COLOR_PAIR(4));
-            mvprintw(1, 3, "You found food! Your hunger is satisfied.");
-            attroff(COLOR_PAIR(4));
-            while (getch() != 32)
+            if (i == food_floor1[j])
             {
+                mvaddch(y_floor1_food[j], x_floor1_food[j], floor1_food[y_floor1_food[j]][x_floor1_food[j]]);
+                statuse_food_floor1[j] = 1;
             }
-            mvprintw(1, 3, "                                                            ");
-            floor1_food[y][x] = '.';
-            mvaddch(y_floor1_food[j], x_floor1_food[j], floor1_food[y_floor1_food[j]][x_floor1_food[j]]);
+            if (y == y_floor1_food[j] && x == x_floor1_food[j] && floor1_food[y][x] == '*')
+            {
+                mvaddch(y_floor1_food[j], x_floor1_food[j], 'O');
+
+                *n = 0;
+                attron(COLOR_PAIR(4));
+                mvprintw(1, 3, "You found food! Your hunger is satisfied.");
+                attroff(COLOR_PAIR(4));
+                while (getch() != 32)
+                {
+                }
+                mvprintw(1, 3, "                                                            ");
+                floor1_food[y][x] = '.';
+                mvaddch(y_floor1_food[j], x_floor1_food[j], floor1_food[y_floor1_food[j]][x_floor1_food[j]]);
+            }
+            if (i == 0 && statuse_food_floor1[j] == 1)
+            {
+                mvaddch(y_floor1_food[j], x_floor1_food[j], '.');
+            }
         }
-        if (i == 0 && statuse_food_floor1[j] == 1)
+    }
+    else if (floor == 2)
+    {
+        for (int j = 2; j < 4; j++)
         {
-            mvaddch(y_floor1_food[j], x_floor1_food[j], '.');
+            if (i == food_floor1[j])
+            {
+                mvaddch(y_floor1_food[j], x_floor1_food[j], floor1_food[y_floor1_food[j]][x_floor1_food[j]]);
+                statuse_food_floor1[j] = 1;
+            }
+            if (y == y_floor1_food[j] && x == x_floor1_food[j] && floor1_food[y][x] == '*')
+            {
+                mvaddch(y_floor1_food[j], x_floor1_food[j], 'O');
+
+                *n = 0;
+                attron(COLOR_PAIR(4));
+                mvprintw(1, 3, "You found food! Your hunger is satisfied.");
+                attroff(COLOR_PAIR(4));
+                while (getch() != 32)
+                {
+                }
+                mvprintw(1, 3, "                                                            ");
+                floor1_food[y][x] = '.';
+                mvaddch(y_floor1_food[j], x_floor1_food[j], floor1_food[y_floor1_food[j]][x_floor1_food[j]]);
+            }
+            if (i == 0 && statuse_food_floor1[j] == 1)
+            {
+                mvaddch(y_floor1_food[j], x_floor1_food[j], '.');
+            }
         }
     }
     attroff(A_BOLD);
@@ -1452,10 +1708,333 @@ void Hunger(int n, int *count_message)
     }
     attroff(A_BOLD);
 }
-
-void snake()
+void Enchant_Room_select()
 {
+    Enchant_Room_floor1 = rand() % 7;
+    Enchant_Room_floor2 = rand() % 8 + 7;
 }
+void Enchant_Room(int floor, int y, int x, int *n2, int *counter_enchanted_room)
+{
+    if (floor == 1)
+    {
+        for (int i = starty[Enchant_Room_floor1]; i < starty[Enchant_Room_floor1] + height[Enchant_Room_floor1]; i++)
+        {
+            for (int j = startx[Enchant_Room_floor1]; j < startx[Enchant_Room_floor1] + width[Enchant_Room_floor1]; j++)
+            {
+                if (y == i && x == j)
+                {
+                    *counter_enchanted_room = *counter_enchanted_room + 1;
+                }
+            }
+        }
+        if (*counter_enchanted_room > 5)
+        {
+            *n2 = *n2 - 1;
+            *counter_enchanted_room = 0;
+        }
+    }
+    else if (floor == 2)
+    {
+        for (int i = starty[Enchant_Room_floor2]; i < starty[Enchant_Room_floor2] + height[Enchant_Room_floor2]; i++)
+        {
+            for (int j = startx[Enchant_Room_floor2]; j < startx[Enchant_Room_floor2] + width[Enchant_Room_floor2]; j++)
+            {
+                if (y == i && x == j)
+                {
+                    *counter_enchanted_room = *counter_enchanted_room + 1;
+                }
+            }
+        }
+        if (*counter_enchanted_room > 5)
+        {
+            *n2 = *n2 - 1;
+            *counter_enchanted_room = 0;
+        }
+    }
+}
+void tale()
+{
+    int num_of_tale_floor1 = rand() % 10 + 20;
+    for (int i = 0; i < num_of_tale_floor1; i++)
+    {
+        tale_room_floor1 = rand() % 7;
+        int y = rand() % (height[tale_room_floor1] - 2) + 1;
+        int x = rand() % (width[tale_room_floor1] - 2) + 1;
+        int sheddat_tale = rand() % 4;
+
+        if (sheddat_tale == 3)
+            map1[y + starty[tale_room_floor1]][x + startx[tale_room_floor1]] = '?';
+        else
+            map1[y + starty[tale_room_floor1]][x + startx[tale_room_floor1]] = '!';
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+
+    int num_of_tale_floor2 = rand() % 10 + 20;
+    for (int i = 0; i < num_of_tale_floor2; i++)
+    {
+        tale_room_floor2 = rand() % 8 + 7;
+        int y = rand() % (height[tale_room_floor2] - 2) + 1;
+        int x = rand() % (width[tale_room_floor2] - 2) + 1;
+        int sheddat_tale = rand() % 4;
+
+        if (sheddat_tale == 3)
+            map2[y + starty[tale_room_floor2]][x + startx[tale_room_floor2]] = '?';
+        else
+            map2[y + starty[tale_room_floor2]][x + startx[tale_room_floor2]] = '!';
+    }
+}
+void snake_room()
+{
+    int num_of_snake_floor1 = rand() % 4 + 6;
+    for (int i = 0; i < num_of_snake_floor1; i++)
+    {
+        snake_room_floor1 = rand() % 7;
+        int y = rand() % (height[snake_room_floor1] - 2) + 1;
+        int x = rand() % (width[snake_room_floor1] - 2) + 1;
+        if (snake_floor1[y + starty[snake_room_floor1]][x + startx[snake_room_floor1]] != 'S')
+            snake_floor1[y + starty[snake_room_floor1]][x + startx[snake_room_floor1]] = 'S';
+    }
+
+    int num_of_snake_floor2 = rand() % 4 + 6;
+    for (int i = 0; i < num_of_snake_floor2; i++)
+    {
+        snake_room_floor2 = rand() % 8 + 7;
+        int y = rand() % (height[snake_room_floor2] - 2) + 1;
+        int x = rand() % (width[snake_room_floor2] - 2) + 1;
+        if (snake_floor2[y + starty[snake_room_floor2]][x + startx[snake_room_floor2]] != 'S')
+            snake_floor2[y + starty[snake_room_floor2]][x + startx[snake_room_floor2]] = 'S';
+    }
+}
+char previous(int y, int x)
+{
+    int previous_char = mvinch(y, x);
+    return previous_char;
+}
+void snake(int floor, int select_room, int y, int x, int *n2)
+{
+    chtype previous_char;
+
+    if (floor == 1)
+    {
+        if (select_room != 0)
+        {
+            for (int i = starty[select_room - 1]; i < starty[select_room - 1] + height[select_room - 1] - 1; i++)
+            {
+                for (int j = startx[select_room - 1]; j < startx[select_room - 1] + width[select_room - 1] - 1; j++)
+                {
+                    if (snake_floor1[i][j] == 'S' || snake_floor1[i][j] == 's')
+                    {
+                        int y1 = i, x1 = j;
+                        previous_char = mvinch(i, j);
+                        attron(A_BOLD);
+                        attron(COLOR_PAIR(7));
+                        mvaddch(i, j, snake_floor1[i][j]);
+                        attroff(COLOR_PAIR(7));
+                        attroff(A_BOLD);
+
+                        statuse_snake_floor1[i][j] = 1;
+
+                        if (abs(y - y1) >= abs(x - x1))
+                        {
+                            if ((y > i) && (previous(i + 1, j) != 'O') && (previous(i + 1, j) != '_') && (previous(i + 1, j) != '|') && (previous(i + 1, j) != '=') && (snake_floor1[i + 1][j] != 'S') && (snake_floor1[i + 1][j] != 's'))
+                                i++;
+                            else if ((y < i) && (previous(i - 1, j) != 'O') && (previous(i - 1, j) != '_') && (previous(i - 1, j) != '|') && (previous(i - 1, j) != '=') && (snake_floor1[i - 1][j] != 'S') && (snake_floor1[i - 1][j] != 's'))
+                                i--;
+                            else if ((x > j) && (previous(i, j + 1) != 'O') && (previous(i, j + 1) != '_') && (previous(i, j + 1) != '|') && (previous(i, j + 1) != '=') && (snake_floor1[i][j + 1] != 'S') && (snake_floor1[i][j + 1] != 's'))
+                                j++;
+                            else if ((x < j) && (previous(i, j - 1) != 'O') && (previous(i, j - 1) != '_') && (previous(i, j - 1) != '|') && (previous(i, j - 1) != '=') && (snake_floor1[i][j - 1] != 'S') && (snake_floor1[i][j - 1] != 's'))
+                                j--;
+                        }
+                        else
+                        {
+                            if ((x > j) && (previous(i, j + 1) != 'O') && (previous(i, j + 1) != '_') && (previous(i, j + 1) != '|') && (previous(i, j + 1) != '=') && (snake_floor1[i][j + 1] != 'S') && (snake_floor1[i][j + 1] != 's'))
+                                j++;
+                            else if ((x < j) && (previous(i, j - 1) != 'O') && (previous(i, j - 1) != '_') && (previous(i, j - 1) != '|') && (previous(i, j - 1) != '=') && (snake_floor1[i][j - 1] != 'S') && (snake_floor1[i][j - 1] != 's'))
+                                j--;
+                            else if ((y > i) && (previous(i + 1, j) != 'O') && (previous(i + 1, j) != '_') && (previous(i + 1, j) != '|') && (previous(i + 1, j) != '=') && (snake_floor1[i + 1][j] != 'S') && (snake_floor1[i + 1][j] != 's'))
+                                i++;
+                            else if ((y < i) && (previous(i - 1, j) != 'O') && (previous(i - 1, j) != '_') && (previous(i - 1, j) != '|') && (previous(i - 1, j) != '=') && (snake_floor1[i - 1][j] != 'S') && (snake_floor1[i - 1][j] != 's'))
+                                i--;
+                        }
+
+                        if (snake_floor1[y1][x1] == 'S')
+                        {
+                            snake_floor1[i][j] = 'S';
+                        }
+                        else if (snake_floor1[y1][x1] = 's')
+                        {
+                            snake_floor1[i][j] = 's';
+                        }
+                        snake_floor1[y1][x1] = ' ';
+                        mvaddch(y1, x1, previous_char);
+                        attron(A_BOLD);
+                        attron(COLOR_PAIR(7));
+                        mvaddch(i, j, snake_floor1[i][j]);
+                        attroff(COLOR_PAIR(7));
+                        attroff(A_BOLD);
+
+                        statuse_snake_floor1[i][j] = 1;
+
+                        if ((abs(y - i) == 1 && abs(x - j) == 0) || (abs(x - j) == 1 && abs(y - i) == 0))
+                        {
+                            *n2 = *n2 - 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        else if (select_room == 0)
+        {
+            for (int i = 3; i < 42; i++)
+            {
+                for (int j = 3; j < 181; j++)
+                {
+                    if ((snake_floor1[i][j] == 'S' || snake_floor1[i][j] == 's') && statuse_snake_floor1[i][j] == 1)
+                    {
+                        attron(A_BOLD);
+                        mvaddch(i, j, map1[i][j]);
+                        attroff(A_BOLD);
+                    }
+                }
+            }
+        }
+    }
+
+    else if (floor == 2)
+    {
+        if (select_room != 0)
+        {
+            for (int i = starty[select_room - 1]; i < starty[select_room - 1] + height[select_room - 1] - 1; i++)
+            {
+                for (int j = startx[select_room - 1]; j < startx[select_room - 1] + width[select_room - 1] - 1; j++)
+                {
+                    if (snake_floor2[i][j] == 'S' || snake_floor2[i][j] == 's')
+                    {
+                        int y1 = i, x1 = j;
+                        previous_char = mvinch(i, j);
+                        attron(A_BOLD);
+                        attron(COLOR_PAIR(7));
+                        mvaddch(i, j, snake_floor2[i][j]);
+                        attroff(COLOR_PAIR(7));
+                        attroff(A_BOLD);
+
+                        statuse_snake_floor2[i][j] = 1;
+
+                        if (abs(y - y1) >= abs(x - x1))
+                        {
+                            if ((y > i) && (previous(i + 1, j) != 'O') && (previous(i + 1, j) != '_') && (previous(i + 1, j) != '|') && (previous(i + 1, j) != '=') && (snake_floor2[i + 1][j] != 'S') && (snake_floor2[i + 1][j] != 's'))
+                                i++;
+                            else if ((y < i) && (previous(i - 1, j) != 'O') && (previous(i - 1, j) != '_') && (previous(i - 1, j) != '|') && (previous(i - 1, j) != '=') && (snake_floor2[i - 1][j] != 'S') && (snake_floor2[i - 1][j] != 's'))
+                                i--;
+                            else if ((x > j) && (previous(i, j + 1) != 'O') && (previous(i, j + 1) != '_') && (previous(i, j + 1) != '|') && (previous(i, j + 1) != '=') && (snake_floor2[i][j + 1] != 'S') && (snake_floor2[i][j + 1] != 's'))
+                                j++;
+                            else if ((x < j) && (previous(i, j - 1) != 'O') && (previous(i, j - 1) != '_') && (previous(i, j - 1) != '|') && (previous(i, j - 1) != '=') && (snake_floor2[i][j - 1] != 'S') && (snake_floor2[i][j - 1] != 's'))
+                                j--;
+                        }
+                        else
+                        {
+                            if ((x > j) && (previous(i, j + 1) != 'O') && (previous(i, j + 1) != '_') && (previous(i, j + 1) != '|') && (previous(i, j + 1) != '=') && (snake_floor2[i][j + 1] != 'S') && (snake_floor2[i][j + 1] != 's'))
+                                j++;
+                            else if ((x < j) && (previous(i, j - 1) != 'O') && (previous(i, j - 1) != '_') && (previous(i, j - 1) != '|') && (previous(i, j - 1) != '=') && (snake_floor2[i][j - 1] != 'S') && (snake_floor2[i][j - 1] != 's'))
+                                j--;
+                            else if ((y > i) && (previous(i + 1, j) != 'O') && (previous(i + 1, j) != '_') && (previous(i + 1, j) != '|') && (previous(i + 1, j) != '=') && (snake_floor2[i + 1][j] != 'S') && (snake_floor2[i + 1][j] != 's'))
+                                i++;
+                            else if ((y < i) && (previous(i - 1, j) != 'O') && (previous(i - 1, j) != '_') && (previous(i - 1, j) != '|') && (previous(i - 1, j) != '=') && (snake_floor2[i - 1][j] != 'S') && (snake_floor2[i - 1][j] != 's'))
+                                i--;
+                        }
+                        if (snake_floor2[y1][x1] == 'S')
+                        {
+                            snake_floor2[i][j] = 'S';
+                        }
+                        else if (snake_floor2[y1][x1] = 's')
+                        {
+                            snake_floor2[i][j] = 's';
+                        }
+                        mvaddch(y1, x1, previous_char);
+                        attron(A_BOLD);
+                        attron(COLOR_PAIR(7));
+                        mvaddch(i, j, snake_floor2[i][j]);
+                        attroff(COLOR_PAIR(7));
+                        attroff(A_BOLD);
+
+                        statuse_snake_floor2[i][j] = 1;
+
+                        if ((abs(y - i) == 1 && abs(x - j) == 0) || (abs(x - j) == 1 && abs(y - i) == 0))
+                        {
+                            *n2 = *n2 - 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        else if (select_room == 0)
+        {
+            for (int i = 3; i < 42; i++)
+            {
+                for (int j = 3; j < 181; j++)
+                {
+                    if ((snake_floor2[i][j] == 'S' || snake_floor2[i][j] == 's') && statuse_snake_floor2[i][j] == 1)
+                    {
+                        attron(A_BOLD);
+                        mvaddch(i, j, map2[i][j]);
+                        attroff(A_BOLD);
+                    }
+                }
+            }
+        }
+    }
+}
+void Gold()
+{
+    int num_of_gold_floor1 = rand() % 5 + 5;
+    for (int i = 0; i < num_of_gold_floor1; i++)
+    {
+        gold_floor1[i] = rand() % 7 + 1;
+
+        x_floor1_gold[i] = startx[gold_floor1[i] - 1] + rand() % (width[gold_floor1[i] - 1] - 2) + 1;
+        y_floor1_gold[i] = starty[gold_floor1[i] - 1] + rand() % (height[gold_floor1[i] - 1] - 2) + 1;
+
+        if (map1[y_floor1_gold[i]][x_floor1_gold[i]] == '.')
+        {
+            floor1_food[y_floor1_gold[i]][x_floor1_gold[i]] = '$';
+        }
+    }
+}
+void gold_counter(int i, int y, int x, int meghdar)
+{
+    for (int j = 0; j < 2; j++)
+    {
+        if (i == gold_floor1[j])
+        {
+            mvaddch(y_floor1_gold[j], x_floor1_gold[j], floor1_gold[y_floor1_gold[j]][x_floor1_gold[j]]);
+            statuse_gold_floor1[j] = 1;
+        }
+        if (y == y_floor1_gold[j] && x == x_floor1_gold[j] && floor1_gold[y][x] == '$')
+        {
+            mvaddch(y_floor1_gold[j], x_floor1_gold[j], 'O');
+
+            score = score + meghdar;
+            attron(COLOR_PAIR(4));
+            mvprintw(1, 3, "You found gold!");
+            attroff(COLOR_PAIR(4));
+            while (getch() != 32)
+            {
+            }
+            mvprintw(1, 3, "                                                            ");
+            floor1_gold[y][x] = '.';
+            mvaddch(y_floor1_gold[j], x_floor1_gold[j], floor1_gold[y_floor1_gold[j]][x_floor1_gold[j]]);
+        }
+        if (i == 0 && statuse_gold_floor1[j] == 1)
+        {
+            mvaddch(y_floor1_gold[j], x_floor1_gold[j], '.');
+        }
+        mvprintw(43, 65, "%d", score);
+    }
+}
+
 void handle_motion_input()
 {
 
@@ -1480,10 +2059,12 @@ void handle_motion_input()
     int full_food = 10, full_health = 10;
     int n1 = 0;
     int n2 = full_health;
-    print_food(select_room, y, x, &n1);
+    print_food(floor, select_room, y, x, &n1);
+    gold_counter(select_room, y, x, meghdar_gold[y][x]);
     int count_message = 0;
     int count_hunger = 0;
     int count_health = 0;
+    int count_enchanted_room = 0;
     Health(&n2, &count_health);
     int exit = 0;
     while (1)
@@ -1501,50 +2082,146 @@ void handle_motion_input()
 
             case '8':
 
-                if (map1[y - 1][x] == '.' || map1[y - 1][x] == '=' || map1[y - 1][x] == '*' || map1[y - 1][x] == '>')
+                if (map1[y - 1][x] == '.' || map1[y - 1][x] == '=' || map1[y - 1][x] == '*' || map1[y - 1][x] == '>' || map1[y - 1][x] == '?' || map1[y - 1][x] == '!')
+                {
                     y--;
+                    if (snake_floor1[y][x] == 'S')
+                    {
+                        snake_floor1[y][x] = 's';
+                        y++;
+                    }
+                    else if (snake_floor1[y][x] == 's')
+                    {
+                        snake_floor1[y][x] = ' ';
+                        y++;
+                    }
+                }
                 break;
             case '2':
 
-                if (map1[y + 1][x] == '.' || map1[y + 1][x] == '=' || map1[y + 1][x] == '*' || map1[y + 1][x] == '>')
+                if (map1[y + 1][x] == '.' || map1[y + 1][x] == '=' || map1[y + 1][x] == '*' || map1[y + 1][x] == '>' || map1[y + 1][x] == '?' || map1[y + 1][x] == '!')
+                {
                     y++;
+                    if (snake_floor1[y][x] == 'S')
+                    {
+                        snake_floor1[y][x] = 's';
+                        y--;
+                    }
+                    else if (snake_floor1[y][x] == 's')
+                    {
+                        snake_floor1[y][x] = ' ';
+                        y--;
+                    }
+                }
                 break;
             case '6':
 
-                if (map1[y][x + 1] == '.' || map1[y][x + 1] == '=' || map1[y][x + 1] == '*' || map1[y][x + 1] == '>')
+                if (map1[y][x + 1] == '.' || map1[y][x + 1] == '=' || map1[y][x + 1] == '*' || map1[y][x + 1] == '>' || map1[y][x + 1] == '?' || map1[y][x + 1] == '!')
+                {
                     x++;
+                    if (snake_floor1[y][x] == 'S')
+                    {
+                        snake_floor1[y][x] = 's';
+                        x--;
+                    }
+                    else if (snake_floor1[y][x] == 's')
+                    {
+                        snake_floor1[y][x] = ' ';
+                        x--;
+                    }
+                }
                 break;
             case '4':
 
-                if (map1[y][x - 1] == '.' || map1[y][x - 1] == '=' || map1[y][x - 1] == '*' || map1[y][x - 1] == '>')
+                if (map1[y][x - 1] == '.' || map1[y][x - 1] == '=' || map1[y][x - 1] == '*' || map1[y][x - 1] == '>' || map1[y][x - 1] == '?' || map1[y][x - 1] == '!')
+                {
                     x--;
+                    if (snake_floor1[y][x] == 'S')
+                    {
+                        snake_floor1[y][x] = 's';
+                        x++;
+                    }
+                    else if (snake_floor1[y][x] == 's')
+                    {
+                        snake_floor1[y][x] = ' ';
+                        x++;
+                    }
+                }
                 break;
             case '3':
-                if (map1[y + 1][x + 1] == '.' || map1[y + 1][x + 1] == '=' || map1[y + 1][x + 1] == '*' || map1[y + 1][x + 1] == '>')
+                if (map1[y + 1][x + 1] == '.' || map1[y + 1][x + 1] == '=' || map1[y + 1][x + 1] == '*' || map1[y + 1][x + 1] == '>' || map1[y + 1][x + 1] == '?' || map1[y + 1][x + 1] == '!')
                 {
                     x++;
                     y++;
+                    if (snake_floor1[y][x] == 'S')
+                    {
+                        snake_floor1[y][x] = 's';
+                        y++;
+                        x++;
+                    }
+                    else if (snake_floor1[y][x] == 's')
+                    {
+                        snake_floor1[y][x] = ' ';
+                        y++;
+                        x++;
+                    }
                 }
                 break;
             case '7':
-                if (map1[y - 1][x - 1] == '.' || map1[y - 1][x - 1] == '=' || map1[y - 1][x - 1] == '*' || map1[y - 1][x - 1] == '>')
+                if (map1[y - 1][x - 1] == '.' || map1[y - 1][x - 1] == '=' || map1[y - 1][x - 1] == '*' || map1[y - 1][x - 1] == '>' || map1[y - 1][x - 1] == '?' || map1[y - 1][x - 1] == '!')
                 {
                     x--;
                     y--;
+                    if (snake_floor1[y][x] == 'S')
+                    {
+                        snake_floor1[y][x] = 's';
+                        y--;
+                        x--;
+                    }
+                    else if (snake_floor1[y][x] == 's')
+                    {
+                        snake_floor1[y][x] = ' ';
+                        y--;
+                        x--;
+                    }
                 }
                 break;
             case '9':
-                if (map1[y - 1][x + 1] == '.' || map1[y - 1][x + 1] == '=' || map1[y - 1][x + 1] == '*' || map1[y - 1][x + 1] == '>')
+                if (map1[y - 1][x + 1] == '.' || map1[y - 1][x + 1] == '=' || map1[y - 1][x + 1] == '*' || map1[y - 1][x + 1] == '>' || map1[y - 1][x + 1] == '?' || map1[y - 1][x + 1] == '!')
                 {
                     y--;
                     x++;
+                    if (snake_floor1[y][x] == 'S')
+                    {
+                        snake_floor1[y][x] = 's';
+                        y--;
+                        x++;
+                    }
+                    else if (snake_floor1[y][x] == 's')
+                    {
+                        snake_floor1[y][x] = ' ';
+                        y--;
+                        x++;
+                    }
                 }
                 break;
             case '1':
-                if (map1[y + 1][x - 1] == '.' || map1[y + 1][x - 1] == '=' || map1[y + 1][x - 1] == '*' || map1[y + 1][x - 1] == '>')
+                if (map1[y + 1][x - 1] == '.' || map1[y + 1][x - 1] == '=' || map1[y + 1][x - 1] == '*' || map1[y + 1][x - 1] == '>' || map1[y + 1][x - 1] == '?' || map1[y + 1][x - 1] == '!')
                 {
                     y++;
                     x--;
+                    if (snake_floor1[y][x] == 'S')
+                    {
+                        snake_floor1[y][x] = 's';
+                        y++;
+                        x--;
+                    }
+                    else if (snake_floor1[y][x] == 's')
+                    {
+                        snake_floor1[y][x] = ' ';
+                        y++;
+                        x--;
+                    }
                 }
                 break;
             case 'q':
@@ -1590,15 +2267,27 @@ void handle_motion_input()
                     select_room = 6;
                 else if (y == starty[6] + y_door_left[6] + 1 && x == startx[6] + x_door_left[6])
                     select_room = 7;
+
+                if (Enchant_Room_floor1 == select_room - 1)
+                {
+                    attron(COLOR_PAIR(1));
+                    mvprintw(1, 3, "You have entered the enchanted room! Staying in this room will reduce your health!");
+                    attroff(COLOR_PAIR(1));
+                    while (getch() != 32)
+                    {
+                    }
+                    mvprintw(1, 3, "                                                                                       ");
+                }
             }
             if (map1[y][x] == '*')
             {
                 select_room = 0;
             }
-            if (select_room > 0 && select_room < 8)
+            if (select_room < 8)
             {
                 print_room(select_room);
-                print_food(select_room, y, x, &n1);
+                print_food(floor, select_room, y, x, &n1);
+                gold_counter(select_room, y, x, meghdar_gold[y][x]);
             }
             if (exit != 0)
             {
@@ -1611,6 +2300,33 @@ void handle_motion_input()
 
             mvaddch(y, x, 'O');
             refresh();
+
+            Enchant_Room(floor, y, x, &n2, &count_enchanted_room);
+            snake(floor, select_room, y, x, &n2);
+
+            if (map1[y][x] == '!')
+            {
+                attron(COLOR_PAIR(1));
+                mvprintw(1, 3, "You fell into a trap! One of your health points has been lost.");
+                attroff(COLOR_PAIR(1));
+                while (getch() != 32)
+                {
+                }
+                mvprintw(1, 3, "                                                                            ");
+
+                n2--;
+            }
+            if (map1[y][x] == '?')
+            {
+                attron(COLOR_PAIR(1));
+                mvprintw(1, 3, "You fell into a trap! Two health points were lost.");
+                attroff(COLOR_PAIR(1));
+                while (getch() != 32)
+                {
+                }
+                mvprintw(1, 3, "                                                                            ");
+                n2 = n2 - 2;
+            }
 
             if (map1[y][x] == '>')
             {
@@ -1646,7 +2362,6 @@ void handle_motion_input()
                     {
                         for (int j = 3; j < 181; j++)
                         {
-                            // if (save_map2[i][j] == '_' || save_map2[i][j] == '|' || save_map2[i][j] == '=')
                             mvaddch(i, j, save_map2[i][j]);
                         }
                     }
@@ -1668,50 +2383,146 @@ void handle_motion_input()
 
             case '8':
 
-                if (map2[y - 1][x] == '.' || map2[y - 1][x] == '=' || map2[y - 1][x] == '*' || map2[y - 1][x] == '<')
+                if (map2[y - 1][x] == '.' || map2[y - 1][x] == '=' || map2[y - 1][x] == '*' || map2[y - 1][x] == '<' || map2[y - 1][x] == '?' || map2[y - 1][x] == '!')
+                {
                     y--;
+                    if (snake_floor2[y][x] == 'S')
+                    {
+                        snake_floor2[y][x] = 's';
+                        y++;
+                    }
+                    else if (snake_floor2[y][x] == 's')
+                    {
+                        snake_floor2[y][x] = ' ';
+                        y++;
+                    }
+                }
                 break;
             case '2':
 
-                if (map2[y + 1][x] == '.' || map2[y + 1][x] == '=' || map2[y + 1][x] == '*' || map2[y + 1][x] == '<')
+                if (map2[y + 1][x] == '.' || map2[y + 1][x] == '=' || map2[y + 1][x] == '*' || map2[y + 1][x] == '<' || map2[y + 1][x] == '?' || map2[y + 1][x] == '!')
+                {
                     y++;
+                    if (snake_floor2[y][x] == 'S')
+                    {
+                        snake_floor2[y][x] = 's';
+                        y--;
+                    }
+                    else if (snake_floor2[y][x] == 's')
+                    {
+                        snake_floor2[y][x] = ' ';
+                        y--;
+                    }
+                }
                 break;
             case '6':
 
-                if (map2[y][x + 1] == '.' || map2[y][x + 1] == '=' || map2[y][x + 1] == '*' || map2[y][x + 1] == '<')
+                if (map2[y][x + 1] == '.' || map2[y][x + 1] == '=' || map2[y][x + 1] == '*' || map2[y][x + 1] == '<' || map2[y][x + 1] == '?' || map2[y][x + 1] == '!')
+                {
                     x++;
+                    if (snake_floor2[y][x] == 'S')
+                    {
+                        snake_floor2[y][x] = 's';
+                        x--;
+                    }
+                    else if (snake_floor2[y][x] == 's')
+                    {
+                        snake_floor2[y][x] = ' ';
+                        x--;
+                    }
+                }
                 break;
             case '4':
 
-                if (map2[y][x - 1] == '.' || map2[y][x - 1] == '=' || map2[y][x - 1] == '*' || map2[y][x - 1] == '<')
+                if (map2[y][x - 1] == '.' || map2[y][x - 1] == '=' || map2[y][x - 1] == '*' || map2[y][x - 1] == '<' || map2[y][x - 1] == '?' || map2[y][x - 1] == '!')
+                {
                     x--;
+                    if (snake_floor2[y][x] == 'S')
+                    {
+                        snake_floor2[y][x] = 's';
+                        x++;
+                    }
+                    else if (snake_floor2[y][x] == 's')
+                    {
+                        snake_floor2[y][x] = ' ';
+                        x++;
+                    }
+                }
                 break;
             case '3':
-                if (map2[y + 1][x + 1] == '.' || map2[y + 1][x + 1] == '=' || map2[y + 1][x + 1] == '*' || map2[y + 1][x + 1] == '<')
+                if (map2[y + 1][x + 1] == '.' || map2[y + 1][x + 1] == '=' || map2[y + 1][x + 1] == '*' || map2[y + 1][x + 1] == '<' || map2[y + 1][x + 1] == '?' || map2[y + 1][x + 1] == '!')
                 {
                     x++;
                     y++;
+                    if (snake_floor2[y][x] == 'S')
+                    {
+                        snake_floor2[y][x] = 's';
+                        y--;
+                        x--;
+                    }
+                    else if (snake_floor2[y][x] == 's')
+                    {
+                        snake_floor2[y][x] = ' ';
+                        y--;
+                        x--;
+                    }
                 }
                 break;
             case '7':
-                if (map2[y - 1][x - 1] == '.' || map2[y - 1][x - 1] == '=' || map2[y - 1][x - 1] == '*' || map2[y - 1][x - 1] == '<')
+                if (map2[y - 1][x - 1] == '.' || map2[y - 1][x - 1] == '=' || map2[y - 1][x - 1] == '*' || map2[y - 1][x - 1] == '<' || map2[y - 1][x - 1] == '?' || map2[y - 1][x - 1] == '!')
                 {
                     x--;
                     y--;
+                    if (snake_floor2[y][x] == 'S')
+                    {
+                        snake_floor2[y][x] = 's';
+                        y++;
+                        x++;
+                    }
+                    else if (snake_floor2[y][x] == 's')
+                    {
+                        snake_floor2[y][x] = ' ';
+                        y++;
+                        x++;
+                    }
                 }
                 break;
             case '9':
-                if (map2[y - 1][x + 1] == '.' || map2[y - 1][x + 1] == '=' || map2[y - 1][x + 1] == '*' || map2[y - 1][x + 1] == '<')
+                if (map2[y - 1][x + 1] == '.' || map2[y - 1][x + 1] == '=' || map2[y - 1][x + 1] == '*' || map2[y - 1][x + 1] == '<' || map2[y - 1][x + 1] == '?' || map2[y - 1][x + 1] == '!')
                 {
                     y--;
                     x++;
+                    if (snake_floor2[y][x] == 'S')
+                    {
+                        snake_floor2[y][x] = 's';
+                        y++;
+                        x--;
+                    }
+                    else if (snake_floor2[y][x] == 's')
+                    {
+                        snake_floor2[y][x] = ' ';
+                        y++;
+                        x--;
+                    }
                 }
                 break;
             case '1':
-                if (map2[y + 1][x - 1] == '.' || map2[y + 1][x - 1] == '=' || map2[y + 1][x - 1] == '*' || map2[y + 1][x - 1] == '<')
+                if (map2[y + 1][x - 1] == '.' || map2[y + 1][x - 1] == '=' || map2[y + 1][x - 1] == '*' || map2[y + 1][x - 1] == '<' || map2[y + 1][x - 1] == '?' || map2[y + 1][x - 1] == '!')
                 {
                     y++;
                     x--;
+                    if (snake_floor2[y][x] == 'S')
+                    {
+                        snake_floor2[y][x] = 's';
+                        y--;
+                        x++;
+                    }
+                    else if (snake_floor2[y][x] == 's')
+                    {
+                        snake_floor2[y][x] = ' ';
+                        y--;
+                        x++;
+                    }
                 }
                 break;
             case 'q':
@@ -1767,7 +2578,7 @@ void handle_motion_input()
             if (select_room > 7 || select_room < 1)
             {
                 print_room(select_room);
-                print_food(select_room, y, x, &n1);
+                print_food(floor, select_room, y, x, &n1);
             }
             if (exit != 0)
             {
@@ -1780,7 +2591,31 @@ void handle_motion_input()
 
             mvaddch(y, x, 'O');
             refresh();
+            Enchant_Room(floor, y, x, &n2, &count_enchanted_room);
+            // snake(floor, select_room, y, x, &n2);
+            if (map2[y][x] == '!')
+            {
+                attron(COLOR_PAIR(1));
+                mvprintw(1, 3, "You fell into a trap! One of your health points has been lost.");
+                attroff(COLOR_PAIR(1));
+                while (getch() != 32)
+                {
+                }
+                mvprintw(1, 3, "                                                                            ");
 
+                n2--;
+            }
+            if (map2[y][x] == '?')
+            {
+                attron(COLOR_PAIR(1));
+                mvprintw(1, 3, "You fell into a trap! Two health points were lost.");
+                attroff(COLOR_PAIR(1));
+                while (getch() != 32)
+                {
+                }
+                mvprintw(1, 3, "                                                                            ");
+                n2 = n2 - 2;
+            }
             if (map2[y][x] == '<')
             {
                 attron(A_BOLD);
@@ -2154,9 +2989,29 @@ int main()
     room1();
     stairs();
     room2();
+    tale();
+    Enchant_Room_select();
     corridor();
     elements();
     food();
+    snake_room();
+    Gold();
     handle_motion_input();
     endwin();
+}
+
+void map()
+{
+    initialization();
+    room1();
+    stairs();
+    room2();
+    tale();
+    Enchant_Room_select();
+    corridor();
+    elements();
+    food();
+    snake_room();
+    Gold();
+    handle_motion_input();
 }

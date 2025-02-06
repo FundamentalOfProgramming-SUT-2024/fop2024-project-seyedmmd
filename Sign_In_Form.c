@@ -28,24 +28,14 @@ void input_box(int starty, int startx, int height, int width)
 }
 
 // تابع برای ساخت رنگ ها
-void init_colors()
-{
-    start_color();
-    init_pair(1, COLOR_WHITE, COLOR_BLUE);
-    init_pair(2, COLOR_BLACK, COLOR_CYAN);
-}
 
 #define max_size 30
 
-int main()
+void sign_in()
 {
     /*
 
     */
-    initscr();
-    cbreak();
-    echo();
-    keypad(stdscr, TRUE);
     /*
 
 
